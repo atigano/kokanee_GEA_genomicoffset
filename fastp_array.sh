@@ -1,7 +1,5 @@
 #!/bin/bash
 #SBATCH --job-name=fastp
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user=annatigano@gmail.com
 #SBATCH --output=fastp.%A_%a.out
 #SBATCH --error=fastp.%A_%a.err
 #SBATCH --time=6:00:00
