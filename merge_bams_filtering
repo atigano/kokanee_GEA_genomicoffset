@@ -1,0 +1,25 @@
+bcftools concat --file-list list_2merge.txt -Ov -o allkokanee.tmp.vcf
+grep -v "^##contig=<ID=NW_" allkokanee.tmp.vcf > allkokanee.vcf
+
+#### calculate missing data 
+vcftools --vcf allkokanee.vcf --missing-indv --out allkokanee
+
+###filter individuals with missing data > 30 %
+module load vcftools
+vcftools --vcf allkokanee.vcf \
+	--remove $ANNA/sample_lists/kokanee_bams_missing30.txt \
+    --max-alleles 2 \
+    --min-alleles 2 \
+    --max-missing 0.7 \
+    --recode \
+    --stdout > allkokanee_nomiss30.vcf
+
+###filter individuals with missing data > 30 % and SNPs in repetitive regions
+vcftools --vcf allkokanee.vcf \
+	--exclude-bed $ANNA/reference/onerka_repeats.bed \
+	--remove $ANNA/sample_lists/kokanee_bams_missing30.txt \
+    --max-alleles 2 \
+    --min-alleles 2 \
+    --max-missing 0.7 \
+    --recode \
+    --stdout > allkokanee_nomiss30_norep.vcf
