@@ -85,16 +85,12 @@ allfreq_sv<-sv.012_kok_df
 popmap_noam_sv<-read.table("popmap_allkokanee_nojapan_sv.txt", header= TRUE)
 popmap_noam_pop_sv <- popmap_noam_sv %>% dplyr::select(ind, pop)
 
-
-
 ###estimated population allele frequencies
 allfreq_sv_AF <- aggregate(allfreq_sv, by = list(popmap_noam_pop_sv$pop), function(x) mean(x, na.rm = T)/2)
 
 allfreq_sv_AF[1:12,1:9]
 write.table(allfreq_sv_AF, "geno.012_kok_sv_af.txt", sep='\t')
 write.table(allfreq_sv_AF[,cand_corr_sv_uni$snp], "geno.012_kok_sv_af_outliers.txt", sep='\t')
-
-
 
 ###  to calulate allele frequency for each ecotype in the  okanagan separately
 popmap_eco_sv<-read.table("popmap_allkokanee_nojapan_okav_eco_sv.txt", header= TRUE)
@@ -157,10 +153,6 @@ library(patchwork)
 combined_pcas<-pc12 + pc13 & theme(legend.position = "bottom")
 combined_pcas_legend<- combined_pcas + plot_layout(guides="collect")
 combined_pcas_legend + plot_annotation(title="Structural variation", tag_levels = 'A')
-
-
-
-
 
 
 library(plotly)
