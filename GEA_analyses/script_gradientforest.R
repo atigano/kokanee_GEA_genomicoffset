@@ -1,10 +1,9 @@
-setwd("~/Dropbox/postdoc UBC/analyses_allkokanee")
+setwd("...")
 #install.packages("gradientForest", repos="http://R-Forge.R-project.org")
 library(gradientForest)
 library(dplyr)
 library(tidyverse)
 detach("package:tidyverse", unload=TRUE)
-setwd("~/Dropbox/postdoc UBC/analyses_allkokanee//")
 #install.packages(c("geodata","raster","sp","rgdal"))
 library(geodata)
 library(raster)
@@ -13,9 +12,6 @@ library(rgdal)
 library(data.table)
 library(gtools)
 library(colorRamps)
-
-#libraries <- c("rgdal", "raster", "gtools", "adespatial", "ade4", "adegraphics", "spdep", "maptools", "adegenet", "qvalue", "pcadapt", "gdm", "gradientForest", "vegan", "rangeBuilder", "rgeos", "assigner", "ggfortify")
-#sapply(libraries, function(x) { suppressMessages(require(x, character.only=T)) } )
 
 
 env_scale<-read.table("env_variables_pastfuture.txt", header = TRUE)
@@ -338,7 +334,6 @@ deltarastw_df<-as.data.frame(deltarastw, xy=TRUE)
 predCand_oka<-predict(gf_out_oka_eco, env_trns[,-1])
 #plot(predCandoka,col=rgb.tables(1000)) ### this is not working
 
-
 ###worst scenario
 transCandw_oka<-predict(gf_out_oka_eco, env_trns_futurew[,-1])
 genoffset_outw_oka<-sqrt(rowSums((transCandw_oka-predCand_oka)^2))
@@ -392,7 +387,7 @@ plot(deltarastb[["bio5"]],zlim = c(-2,13), col=rgb.tables(1000))
 plot(deltarastw[["bio5"]],zlim = c(-2,13), col=rgb.tables(1000))
 
 
-### okanagan ecortpes split structural outliers
+### okanagan ecotypes split - structural outliers
 ###genomic offset okanagan ecotypes separated
 #transform env using gf models
 predCand_oka_sv<-predict(gf_out_oka_eco_sv, env_trns[,-1])
@@ -465,7 +460,7 @@ max(deltab_pop_df$bio5)
 min(deltaw_pop_df$bio1)
 max(deltaw_pop_df$bio1)
 
-
+### map plotting
 library(ggplot2)
 library(scales)
 #install.packages("sf")
@@ -575,83 +570,7 @@ summary(lm_sv_b_lat)
 summary(lm_sv_b_lat)
 summary(lm_snp_b_lat)
 
-# Call:
-#   lm(formula = y ~ gen_off, data = genomicofsset_b)
-# 
-# Residuals:
-#   Min      1Q  Median      3Q     Max 
-# -4.2872 -1.6768 -0.6348  1.6909  4.9761 
-# 
-# Coefficients:
-#   Estimate Std. Error t value Pr(>|t|)    
-# (Intercept)    59.84       2.78  21.522 2.65e-15 ***
-#   gen_off      -432.77     145.88  -2.967  0.00763 ** 
-#   ---
-#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-# 
-# Residual standard error: 2.461 on 20 degrees of freedom
-# Multiple R-squared:  0.3056,	Adjusted R-squared:  0.2709 
-# F-statistic: 8.801 on 1 and 20 DF,  p-value: 0.007627
-# 
-# > summary(lm_snp_w_lat)
-# 
-# Call:
-#   lm(formula = y ~ gen_off, data = genomicofsset_w)
-# 
-# Residuals:
-#   Min      1Q  Median      3Q     Max 
-# -5.3196 -1.3105 -0.1236  1.5928  3.8165 
-# 
-# Coefficients:
-#   Estimate Std. Error t value Pr(>|t|)    
-# (Intercept)   64.988      3.573  18.187 6.57e-14 ***
-#   gen_off     -539.813    144.235  -3.743  0.00128 ** 
-#   ---
-#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-# 
-# Residual standard error: 2.265 on 20 degrees of freedom
-# Multiple R-squared:  0.4119,	Adjusted R-squared:  0.3825 
-# F-statistic: 14.01 on 1 and 20 DF,  p-value: 0.001283
-# 
-# > summary(lm_sv_b_lat)
-# 
-# Call:
-#   lm(formula = y ~ gen_off, data = genomicofsset_b_sv)
-# 
-# Residuals:
-#   Min      1Q  Median      3Q     Max 
-# -4.8600 -1.6918 -0.4077  1.1328  4.6868 
-# 
-# Coefficients:
-#   Estimate Std. Error t value Pr(>|t|)    
-# (Intercept)    59.523      2.549  23.352  5.5e-16 ***
-#   gen_off     -1351.883    433.417  -3.119  0.00541 ** 
-#   ---
-#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-# 
-# Residual standard error: 2.422 on 20 degrees of freedom
-# Multiple R-squared:  0.3273,	Adjusted R-squared:  0.2936 
-# F-statistic: 9.729 on 1 and 20 DF,  p-value: 0.005405
-# 
-# > summary(lm_sv_b_lat)
-# 
-# Call:
-#   lm(formula = y ~ gen_off, data = genomicofsset_b_sv)
-# 
-# Residuals:
-#   Min      1Q  Median      3Q     Max 
-# -4.8600 -1.6918 -0.4077  1.1328  4.6868 
-# 
-# Coefficients:
-#   Estimate Std. Error t value Pr(>|t|)    
-# (Intercept)    59.523      2.549  23.352  5.5e-16 ***
-#   gen_off     -1351.883    433.417  -3.119  0.00541 ** 
-#   ---
-#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-# 
-# Residual standard error: 2.422 on 20 degrees of freedom
-# Multiple R-squared:  0.3273,	Adjusted R-squared:  0.2936 
-# F-statistic: 9.729 on 1 and 20 DF,  p-value: 0.005405
+
 
 deltarastw_df
 deltat_b<-raster::extract(deltarastb, coords)
@@ -670,89 +589,6 @@ summary(lm_snp_b)
 summary(lm_snp_w)
 summary(lm_sv_b)
 summary(lm_sv_b)
-
-# > summary(lm_snp_b)
-# 
-# Call:
-#   lm(formula = bio5 ~ gen_off, data = genomicofsset_b)
-# 
-# Residuals:
-#   Min      1Q  Median      3Q     Max 
-# -1.9454 -0.4271  0.1757  0.7292  1.2360 
-# 
-# Coefficients:
-#   Estimate Std. Error t value Pr(>|t|)    
-# (Intercept)    2.313      1.042   2.220  0.03813 *  
-#   gen_off      251.878     54.660   4.608  0.00017 ***
-#   ---
-#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-# 
-# Residual standard error: 0.9221 on 20 degrees of freedom
-# Multiple R-squared:  0.515,	Adjusted R-squared:  0.4907 
-# F-statistic: 21.23 on 1 and 20 DF,  p-value: 0.0001701
-# 
-# > summary(lm_snp_w)
-# 
-# Call:
-#   lm(formula = bio5 ~ gen_off, data = genomicofsset_w)
-# 
-# Residuals:
-#   Min      1Q  Median      3Q     Max 
-# -1.6054 -0.4073  0.2532  0.5228  0.8802 
-# 
-# Coefficients:
-#   Estimate Std. Error t value Pr(>|t|)    
-# (Intercept)  -0.1823     1.3024   -0.14     0.89    
-# gen_off     381.1200    52.5712    7.25 5.16e-07 ***
-#   ---
-#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-# 
-# Residual standard error: 0.8255 on 20 degrees of freedom
-# Multiple R-squared:  0.7244,	Adjusted R-squared:  0.7106 
-# F-statistic: 52.56 on 1 and 20 DF,  p-value: 5.156e-07
-# 
-# > summary(lm_sv_b)
-# 
-# Call:
-#   lm(formula = bio5 ~ gen_off, data = genomicofsset_b_sv)
-# 
-# Residuals:
-#   Min       1Q   Median       3Q      Max 
-# -1.90599 -0.08382  0.16815  0.52521  0.84566 
-# 
-# Coefficients:
-#   Estimate Std. Error t value Pr(>|t|)    
-# (Intercept)   2.1818     0.8468   2.576    0.018 *  
-#   gen_off     841.3543   143.9889   5.843 1.02e-05 ***
-#   ---
-#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-# 
-# Residual standard error: 0.8047 on 20 degrees of freedom
-# Multiple R-squared:  0.6306,	Adjusted R-squared:  0.6121 
-# F-statistic: 34.14 on 1 and 20 DF,  p-value: 1.023e-05
-# 
-# > summary(lm_sv_b)
-# 
-# Call:
-#   lm(formula = bio5 ~ gen_off, data = genomicofsset_b_sv)
-# 
-# Residuals:
-#   Min       1Q   Median       3Q      Max 
-# -1.90599 -0.08382  0.16815  0.52521  0.84566 
-# 
-# Coefficients:
-#   Estimate Std. Error t value Pr(>|t|)    
-# (Intercept)   2.1818     0.8468   2.576    0.018 *  
-#   gen_off     841.3543   143.9889   5.843 1.02e-05 ***
-#   ---
-#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-# 
-# Residual standard error: 0.8047 on 20 degrees of freedom
-# Multiple R-squared:  0.6306,	Adjusted R-squared:  0.6121 
-# F-statistic: 34.14 on 1 and 20 DF,  p-value: 1.023e-05
-# 
-
-
 
 ggplot(genomicofsset_b, aes(bio5,gen_off)) + geom_point()
 ggplot(genomicofsset_w, aes(bio5,gen_off)) + geom_point()
@@ -890,42 +726,7 @@ go_b_lm<-lm(genomicofsset_b$gen_off~ genomicofsset_b_sv$gen_off)
 go_w_lm<-lm(genomicofsset_w$gen_off~ genomicofsset_w_sv$gen_off)
 
 summary(go_b_lm)
-# Call:
-#   lm(formula = genomicofsset_b$gen_off ~ genomicofsset_b_sv$gen_off)
-# 
-# Residuals:
-#   Min         1Q     Median         3Q        Max 
-# -0.0013784 -0.0004953 -0.0001163  0.0004402  0.0016012 
-# 
-# Coefficients:
-#   Estimate Std. Error t value Pr(>|t|)    
-# (Intercept)                0.0017600  0.0008749   2.012   0.0579 .  
-# genomicofsset_b_sv$gen_off 2.9443229  0.1487681  19.791 1.32e-14 ***
-#   ---
-#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-# 
-# Residual standard error: 0.0008315 on 20 degrees of freedom
-# Multiple R-squared:  0.9514,	Adjusted R-squared:  0.949 
-# F-statistic: 391.7 on 1 and 20 DF,  p-value: 1.319e-14
-
 summary(go_w_lm)
-# Call:
-#   lm(formula = genomicofsset_w$gen_off ~ genomicofsset_w_sv$gen_off)
-# 
-# Residuals:
-#   Min         1Q     Median         3Q        Max 
-# -1.831e-03 -4.679e-04  2.452e-05  4.621e-04  1.714e-03 
-# 
-# Coefficients:
-#   Estimate Std. Error t value Pr(>|t|)    
-# (Intercept)                0.001852   0.001339   1.384    0.182    
-# genomicofsset_w_sv$gen_off 3.002568   0.175354  17.123 2.05e-13 ***
-#   ---
-#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-# 
-# Residual standard error: 0.0008873 on 20 degrees of freedom
-# Multiple R-squared:  0.9361,	Adjusted R-squared:  0.9329 
-# F-statistic: 293.2 on 1 and 20 DF,  p-value: 2.047e-13
 
 
 install.packages("RColorBrewer")
@@ -961,22 +762,3 @@ ggplot() +
   geom_point(data=location_coord, mapping=aes(x,y, fill=location), shape=21, size=3, col="black") + 
   geom_text_repel(data=location_coord, mapping=aes(x,y,label=location), max.overlaps = Inf, size=5) + 
   scale_fill_manual(values=new_bg) 
-
-
-
-
-location_coord$location = factor(location_coord$location, levels=c("Sockeye", "Thutade", "Tchesinkut", "Cluculz", "Bobtail", "Arctic", "Puntzi", "La_Hache", "Bonaparte", "Dunn", "EastBarriere", "Anderson", "Nicola", "Okanagan", "Wood", "Kalamalka", "Christina", "Arrow_Hill", "Arrow_Mosq", "Kootenay", "Cowichan", "Shawningan"))
-
-new_bg<-c("#001219", "#3c096c", "#B785FF", "#013a63", "#4A9FFF", "#AAD8FF", "#005E29", "#00C05A", "#83D477", "#b9e769", "#e9d8a6", "#efea5a", "#f1c453", "#f29e4c", "#f3722c", "#f94144", "#d00000", "#9d0208", "#6a040f", "#990066", "#d94a8c", "#fad2e1")
-levels=c("Sockeye", "Thutade", "Tchesinkut", "Cluculz", "Arctic", "Puntzi", "Bobtail", "La_Hache", "Bonaparte", "Dunn", "EastBarriere", "Anderson", "Nicola", "Okanagan", "Wood", "Kalamalka", "Christina", "Arrow_Hill", "Arrow_Mosq", "Kootenay", "Cowichan", "Shawningan")))%
-+
-  new_scale_fill() +
-   +
-  scale_fill_viridis_c(option = "H", limits =c(0.0018,0.01), guide = "legend", name ="Genomic offset") +
-  scale_size_continuous(limits = c(0.0018,0.01), name ="Genomic offset", range=c(0.1,5)) +
-  ggtitle("Structural variation - worst scenario(RCP8.5)") +
-  theme(plot.title = element_text(hjust = 0.5)) 
-
-geno_outliers_oka_new<-as.data.frame(t(geno_outliers_oka[-1,-1]))
-geno_outliers_oka[1:10,1:10]
-rownames(geno_outliers_oka)<-NULL
