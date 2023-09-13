@@ -27,7 +27,7 @@ scale_env <- attr(bio_past_varonly_scale, 'scaled:scale')
 center_env <- attr(bio_past_varonly_scale, 'scaled:center')
 
 
-###from adaptation genomics course
+###f###prepare inout files for RDA (vcf --> 012)
 #vcftools --vcf allkokanee_nomiss30_norep_nakokanee_ld_maf05.vcf --maf 0.05 --012 --out allkokanee_nomiss30_norep_nakokanee_ld_maf05
 #replace -1 with NA, already done with 
 #sed 's/-1/NA/g' allkokanee_nomiss30_norep_nakokanee_ld_maf05.012 > allkokanee_nomiss30_norep_nakokanee_ld_maf05_na.012
