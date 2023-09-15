@@ -22,3 +22,5 @@ plink --bed allkokanee_nomiss30_norep_annot.bed \
 --out allkokanee_nomiss30_norep_annot_ld
 
 vcftools --vcf allkokanee_nomiss30_norep_annot.vcf --exclude allkokanee_nomiss30_norep_annot_ld.prune.out --recode --out allkokanee_nomiss30_norep_annot_ld
+
+### after filtering out samples not required for this analysis and retaining only kokanee from North America, the final file is called allkokanee_nomiss30_norep_nakokanee_ld_maf05.vcf
