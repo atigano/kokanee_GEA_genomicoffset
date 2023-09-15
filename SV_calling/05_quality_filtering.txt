@@ -1,0 +1,49 @@
+### Index bcf file, apply germline filter and convert bcf to vcf
+bcftools index delly_allkokanee_gea_sv.bcf
+delly filter -f germline -o delly_allkokanee_gea_sv_filtered.bcf delly_allkokanee_gea_sv.bcf
+bcftools convert -O v -o delly_allkokanee_gea_sv_filtered.vcf delly_allkokanee_gea_sv_filtered.bcf
+
+### Quality filtering
+bcftools filter -i'FILTER="PASS"' -O v -o delly_allkokanee_gea_sv_filtered_pass.vcf delly_allkokanee_gea_sv_filtered.vcf
+
+### Replace low quality genotypes with missing values
+bcftools filter -S . -e'FT="LowQual"' -O v -o delly_allkokanee_gea_sv_filtered_pass_genotype.vcf delly_allkokanee_gea_sv_filtered_pass.vcf
+
+### Filter non bi-allelic variants and filter by missing data %
+vcftools --vcf delly_allkokanee_gea_sv_filtered_pass_genotype.vcf \
+    --max-alleles 2 \
+    --min-alleles 2 \
+    --max-missing 0.8 \
+    --recode \
+    --recode-INFO-all \
+    --stdout > delly_allkokanee_gea_sv_filtered_pass_genotype_miss80.vcf
+
+
+### Split vcf file by SV type
+grep "#" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80.vcf > delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_ins.vcf && grep "SVTYPE=INS" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80.vcf >> delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_ins.vcf
+grep "#" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80.vcf > delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_del.vcf && grep "SVTYPE=DEL" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80.vcf >> delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_del.vcf
+grep "#" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80.vcf > delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_inv.vcf && grep "SVTYPE=INV" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80.vcf >> delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_inv.vcf
+grep "#" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80.vcf > delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_dup.vcf && grep "SVTYPE=DUP" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80.vcf >> delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_dup.vcf
+grep "#" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80.vcf > delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_bnd.vcf && grep "SVTYPE=BND" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80.vcf >> delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_bnd.vcf
+
+grep -v "#" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_ins.vcf | wc -l #3535
+grep -v "#" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_del.vcf | wc -l #4916
+grep -v "#" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_inv.vcf | wc -l #218
+grep -v "#" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_dup.vcf | wc -l #753
+grep -v "#" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_bnd.vcf | wc -l #85
+
+
+### Remove breakpoints-translocations
+grep -v "SVTYPE=BND" delly_allkokanee_gea_sv_filtered_pass_genotype_miss80.vcf > delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_nobnd.vcf
+
+### Recode genotypes for PCA
+cd /home/annat/projects/rrg-mirussel/anna/variant_calling/allkokanee/structural_variants
+module load vcftools
+vcftools --vcf delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_nobnd.vcf --012 --out delly_allkokanee_gea_sv_filtered_pass_genotype_miss80_nobnd
+
+### and for each SV type
+vcftools --vcf delly_okanagan_sv_filtered_ins.vcf --012 --out delly_okanagan_sv_filtered_ins
+vcftools --vcf delly_okanagan_sv_filtered_del.vcf --012 --out delly_okanagan_sv_filtered_del
+vcftools --vcf delly_okanagan_sv_filtered_inv.vcf --012 --out delly_okanagan_sv_filtered_inv
+vcftools --vcf delly_okanagan_sv_filtered_dup.vcf --012 --out delly_okanagan_sv_filtered_dup
+vcftools --vcf delly_okanagan_sv_filtered_bnd.vcf --012 --out delly_okanagan_sv_filtered_bnd
